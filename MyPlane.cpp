@@ -1,4 +1,5 @@
 #include "MyPlane.h"
+#include "MyBullet.h"
 USING_NS_CC;
 
 MyPlane *MyPlane::m_pMyPlane = NULL;
@@ -65,7 +66,9 @@ void MyPlane::ccTouchMoved(CCTouch* touch, CCEvent* event){
 
 void MyPlane::shoot(float dt)
 {
+	MyBullet *pMyBullet = MyBullet::getSharedMyBullet();
 
+	pMyBullet->addNewBullet(m_pPlane->getPosition());
 }
 
 void MyPlane::changePicture(float dt)
@@ -81,6 +84,6 @@ void MyPlane::changePicture(float dt)
 
 	m_pPlane->setPosition(ccp(m_pPlane->getPositionX(), m_pPlane->getPositionY() + (afterChangeHeight - beforeChangeHeight) / 2));
 
-	CCLOG("width:%lf height:%lf",m_pPlane->getContentSize().width, m_pPlane->getContentSize().height);
-	CCLOG("bottom:%lf",m_pPlane->getPositionY() - m_pPlane->getContentSize().height / 2);
+	//CCLOG("width:%lf height:%lf",m_pPlane->getContentSize().width, m_pPlane->getContentSize().height);
+	//CCLOG("bottom:%lf",m_pPlane->getPositionY() - m_pPlane->getContentSize().height / 2);
 }

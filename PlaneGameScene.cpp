@@ -2,6 +2,8 @@
 #include "MyPlane.h"
 #include "MyBullet.h"
 #include "MyBackground.h"
+#include "EnemyPlane.h"
+#include "time.h"
 
 USING_NS_CC;
 
@@ -24,7 +26,16 @@ bool PlaneGameScene::init()
 
 		//	My plane init
 		MyPlane *pMyPlane = MyPlane::getSharedMyPlane();
-		this->addChild(pMyPlane);
+		this->addChild(pMyPlane,1);
+
+		//	My bullet init
+		MyBullet *pMyBullet = MyBullet::getSharedMyBullet();
+		this->addChild(pMyBullet,0);
+
+		srand(time(NULL));
+		//	Enemy plane init
+		EnemyPlane *pEnemyPlane = EnemyPlane::getSharedEnemyPlane();
+		this->addChild(pEnemyPlane,1);
 
 		bRet = true;
 	} while (0);
