@@ -22,6 +22,7 @@ public:
 	static MyPlane *getSharedMyPlane();
 
 	bool init();
+	void isOver();
 
 	//touch
 	virtual bool ccTouchBegan(cocos2d::CCTouch* touch, cocos2d::CCEvent* event);

@@ -15,7 +15,9 @@ public:
 
 	static EnemyPlane *getSharedEnemyPlane();
 	bool init();
+	void isOver(int index);
 
+	void shoot(float dt);
 	void addEnemyPlane(float dt);
 
 	CREATE_FUNC(EnemyPlane);

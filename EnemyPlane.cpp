@@ -1,5 +1,6 @@
 #include "cocos2d.h"
 #include "EnemyPlane.h"
+#include "EnemyBullet.h"
 
 USING_NS_CC;
 
@@ -23,10 +24,18 @@ bool EnemyPlane::init()
 		m_pArrayOfPlane->retain();
 
 		this->schedule(schedule_selector(EnemyPlane::addEnemyPlane), 2.0f);
+		this->schedule(schedule_selector(EnemyPlane::shoot), 3.0f);
 
 		bRet = true;
 	} while (0);
 	return bRet;
+}
+
+void EnemyPlane::isOver(int index)
+{
+	CCSprite *pDelPlane = (CCSprite*)m_pArrayOfPlane->objectAtIndex(index);
+	m_pArrayOfPlane->removeObjectAtIndex(index);
+	pDelPlane->removeFromParent();
 }
 
 void EnemyPlane::addEnemyPlane(float dt)
@@ -54,4 +63,13 @@ void EnemyPlane::addEnemyPlane(float dt)
 	pNewEnemyPlane->runAction(pAction);
 
 	this->addChild(pNewEnemyPlane);
+}
+
+void EnemyPlane::shoot(float dt)
+{
+	for (int i = 0; i < m_pArrayOfPlane->count(); i++)
+	{
+		CCSprite *pCurPlane = (CCSprite*)m_pArrayOfPlane->objectAtIndex(i);
+		EnemyBullet::getSharedEnemyBullet()->addNewBullet(pCurPlane->getPosition());
+	}
 }

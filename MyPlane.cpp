@@ -16,6 +16,8 @@ bool MyPlane::init()
 	bool bRet = false;
 	do 
 	{
+		CC_BREAK_IF(!CCLayer::init());
+
 		//	Create a plane (CCSprite)
 		//	Current frame.
 		m_frame = 0;
@@ -32,6 +34,11 @@ bool MyPlane::init()
 	} while (0);
 
 	return bRet;
+}
+
+void MyPlane::isOver()
+{
+	m_pPlane->removeFromParent();
 }
 
 void MyPlane::onEnter()
@@ -75,6 +82,7 @@ void MyPlane::changePicture(float dt)
 {
 	float beforeChangeHeight =  m_pPlane->getContentSize().height;
 
+	//	Change frame
 	m_frame = (m_frame + 1) % SHIP_MAX_NUMBER;
 	char str[20] = {0};
 	sprintf(str, "ship%02d.png", m_frame + 1);
@@ -82,8 +90,6 @@ void MyPlane::changePicture(float dt)
 
 	float afterChangeHeight = m_pPlane->getContentSize().height;
 
+	//	Fix the position to set the position as before.
 	m_pPlane->setPosition(ccp(m_pPlane->getPositionX(), m_pPlane->getPositionY() + (afterChangeHeight - beforeChangeHeight) / 2));
-
-	//CCLOG("width:%lf height:%lf",m_pPlane->getContentSize().width, m_pPlane->getContentSize().height);
-	//CCLOG("bottom:%lf",m_pPlane->getPositionY() - m_pPlane->getContentSize().height / 2);
 }

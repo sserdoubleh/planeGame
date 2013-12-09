@@ -17,6 +17,8 @@ protected:
 public:
 	static MyBullet * getSharedMyBullet();
 	bool init();
+	void isOver(int index);
+
 	void addNewBullet(CCPoint from);
 
 	void move(float dt);

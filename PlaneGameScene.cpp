@@ -3,6 +3,7 @@
 #include "MyBullet.h"
 #include "MyBackground.h"
 #include "EnemyPlane.h"
+#include "EnemyBullet.h"
 #include "time.h"
 
 USING_NS_CC;
@@ -36,6 +37,10 @@ bool PlaneGameScene::init()
 		//	Enemy plane init
 		EnemyPlane *pEnemyPlane = EnemyPlane::getSharedEnemyPlane();
 		this->addChild(pEnemyPlane,1);
+
+		//	Enemy bullet init
+		EnemyBullet *pEnemyBullet = EnemyBullet::getSharedEnemyBullet();
+		this->addChild(pEnemyBullet,0);
 
 		bRet = true;
 	} while (0);
