@@ -1,5 +1,5 @@
 #include "AppDelegate.h"
-#include "HelloWorldScene.h"
+#include "PlaneGameScene.h"
 
 USING_NS_CC;
 
@@ -16,7 +16,9 @@ bool AppDelegate::applicationDidFinishLaunching() {
     CCDirector* pDirector = CCDirector::sharedDirector();
     CCEGLView* pEGLView = CCEGLView::sharedOpenGLView();
 
-    pDirector->setOpenGLView(pEGLView);
+	pDirector->setOpenGLView(pEGLView);
+
+	//pEGLView->setDesignResolutionSize(320.0f, 480.0f, kResolutionShowAll);
 	
     // turn on display FPS
     pDirector->setDisplayStats(true);
@@ -25,7 +27,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     pDirector->setAnimationInterval(1.0 / 60);
 
     // create a scene. it's an autorelease object
-    CCScene *pScene = HelloWorld::scene();
+    PlaneGameScene *pScene = PlaneGameScene::create();
 
     // run
     pDirector->runWithScene(pScene);
