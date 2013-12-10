@@ -1,6 +1,8 @@
 #include "cocos2d.h"
+#include "CCPlane.h"
 #include "EnemyPlane.h"
 #include "EnemyBullet.h"
+#include "MyPlane.h"
 
 USING_NS_CC;
 
@@ -25,6 +27,7 @@ bool EnemyPlane::init()
 
 		this->schedule(schedule_selector(EnemyPlane::addEnemyPlane), 2.0f);
 		this->schedule(schedule_selector(EnemyPlane::shoot), 3.0f);
+		this->schedule(schedule_selector(EnemyPlane::hit), 0.1f);
 
 		bRet = true;
 	} while (0);
@@ -35,19 +38,43 @@ void EnemyPlane::isOver(int index)
 {
 	CCSprite *pDelPlane = (CCSprite*)m_pArrayOfPlane->objectAtIndex(index);
 	m_pArrayOfPlane->removeObjectAtIndex(index);
-	pDelPlane->removeFromParent();
+	CCPlane *pPlane = (CCPlane*)pDelPlane;
+	pPlane->isOver();
+}
+
+bool EnemyPlane::hitByBullet(CCSprite *bullet, int power)
+{
+	CCPoint point = bullet->getPosition();
+	for (int i = 0; i < m_pArrayOfPlane->count(); i++)
+	{
+		CCSprite *pCurPlane = (CCSprite*)m_pArrayOfPlane->objectAtIndex(i);
+		CCPoint positionOfPlane = pCurPlane->getPosition();
+		CCSize sizeOfPlane = pCurPlane->getContentSize();
+		if (positionOfPlane.x - sizeOfPlane.width / 2 <= point.x
+			&& point.x <= positionOfPlane.x + sizeOfPlane.width / 2
+			&& positionOfPlane.y - sizeOfPlane.height / 2 <= point.y
+			&& point.y <= positionOfPlane.y + sizeOfPlane.height)
+		{
+			CCPlane *pPlane = (CCPlane *)pCurPlane;
+			if (pPlane->lostHP(power))
+				isOver(i);
+			return true;
+		}
+	}
+	return false;
 }
 
 void EnemyPlane::addEnemyPlane(float dt)
 {
-	CCLOG("ADD a enemy plane");
-
 	int random_number = CCRANDOM_0_1() * 6;
+	CCPlane *pNewEnemyPlane = CCPlane::createWithHPAndId(DEFAULT_HP, random_number);
+	CCSprite *pNewPlane = (CCSprite *) pNewEnemyPlane;
+
 	char str[20];
 	sprintf(str, "E%d.png", random_number);
-	CCSprite *pNewEnemyPlane = CCSprite::createWithSpriteFrameName(str);
+	pNewPlane->initWithSpriteFrameName(str);
 
-	m_pArrayOfPlane->addObject(pNewEnemyPlane);
+	m_pArrayOfPlane->addObject(pNewPlane);
 
 	CCDirector *pDirector = CCDirector::sharedDirector();
 	CCPoint origin = pDirector->getVisibleOrigin();
@@ -60,9 +87,9 @@ void EnemyPlane::addEnemyPlane(float dt)
 		CCPlace::create(ccp(random_x, origin.y + visibleSize.height)),
 		CCMoveTo::create(1.0f,ccp(random_X, random_Y)),
 		NULL);
-	pNewEnemyPlane->runAction(pAction);
+	pNewPlane->runAction(pAction);
 
-	this->addChild(pNewEnemyPlane);
+	this->addChild(pNewPlane);
 }
 
 void EnemyPlane::shoot(float dt)
@@ -71,5 +98,18 @@ void EnemyPlane::shoot(float dt)
 	{
 		CCSprite *pCurPlane = (CCSprite*)m_pArrayOfPlane->objectAtIndex(i);
 		EnemyBullet::getSharedEnemyBullet()->addNewBullet(pCurPlane->getPosition());
+	}
+}
+
+void EnemyPlane::hit(float dt)
+{
+	MyPlane *pMyPlane = MyPlane::getSharedMyPlane();
+	for (int i = 0; i < m_pArrayOfPlane->count(); )
+	{
+		CCSprite *pCurPlane = (CCSprite*)m_pArrayOfPlane->objectAtIndex(i);
+		if (pMyPlane->hitByEnemy(pCurPlane, DEFAULT_POWER))
+			isOver(i);
+		else
+			i++;
 	}
 }

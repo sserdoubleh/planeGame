@@ -8,13 +8,16 @@ class MyBullet :
 	public cocos2d::CCLayer
 {
 private:
-	static const int DEFAULT_POWER = 10;
+	static MyBullet *m_pSharedMyBullet;
+
 protected:
 	//The array of the bullet(CCSprite)
 	CCArray *m_pArrayOfBullet;
-	static MyBullet *m_pSharedMyBullet;
 
 public:
+	
+	static const int DEFAULT_POWER = 10;
+
 	static MyBullet * getSharedMyBullet();
 	bool init();
 	void isOver(int index);
@@ -22,6 +25,7 @@ public:
 	void addNewBullet(CCPoint from);
 
 	void move(float dt);
+	void hit(float dt);
 
 	CREATE_FUNC(MyBullet);
 };

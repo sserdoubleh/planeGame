@@ -1,4 +1,5 @@
 #include "MyBullet.h"
+#include "EnemyPlane.h"
 #include "cocos2d.h"
 
 USING_NS_CC;
@@ -22,6 +23,7 @@ bool MyBullet::init()
 		m_pArrayOfBullet->retain();
 
 		this->schedule(schedule_selector(MyBullet::move), 0.1f);
+		this->schedule(schedule_selector(MyBullet::hit), 0.1f);
 		bRet = true;
 	} while (0);
 	return bRet;
@@ -37,11 +39,14 @@ void MyBullet::isOver(int index)
 void MyBullet::addNewBullet(CCPoint from)
 {
 	CCSprite *pNewBullet = CCSprite::createWithSpriteFrameName("W1.png");
+	ccBlendFunc blend = {GL_SRC_ALPHA, GL_ONE};
+	pNewBullet->setBlendFunc(blend);
 	m_pArrayOfBullet->addObject(pNewBullet);
 
 	pNewBullet->setPosition(from);
 	this->addChild(pNewBullet);
 }
+
 
 void MyBullet::move(float dt)
 {
@@ -49,9 +54,22 @@ void MyBullet::move(float dt)
 	for (int i = 0; i < m_pArrayOfBullet->count(); )
 	{
 		CCSprite *pCurBullet = (CCSprite*)m_pArrayOfBullet->objectAtIndex(i);
-		pCurBullet->setPositionY(pCurBullet->getPositionY() + 40);
+		pCurBullet->setPositionY(pCurBullet->getPositionY() + pCurBullet->getContentSize().height);
 
 		if (pCurBullet->getPositionY() - pCurBullet->getContentSize().height / 2 > pDirector->getWinSize().height)
+			isOver(i);
+		else
+			i++;
+	}
+}
+
+void MyBullet::hit(float dt)
+{
+	EnemyPlane *pEnemyPlane = EnemyPlane::getSharedEnemyPlane();
+	for (int i = 0; i < m_pArrayOfBullet->count(); )
+	{
+		CCSprite *pCurBullet = (CCSprite*) m_pArrayOfBullet->objectAtIndex(i);
+		if (pEnemyPlane->hitByBullet(pCurBullet, DEFAULT_POWER))
 			isOver(i);
 		else
 			i++;

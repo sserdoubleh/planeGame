@@ -2,6 +2,7 @@
 #define __CC_MY_PLANE_H__
 
 #include "cocos2d.h"
+#include "CCPlane.h"
 USING_NS_CC;
 
 class MyPlane :
@@ -9,12 +10,13 @@ class MyPlane :
 	public cocos2d::CCTouchDelegate
 {
 private:
-	static const int DEFAULT_HP = 200;
+	static const int DEFAULT_HP = 2000;
 	static const int SHIP_MAX_NUMBER = 3;
 protected:
 	int hp;
 	int m_frame;
-	CCSprite *m_pPlane;
+	bool m_bIsGameOver;
+	CCPlane *m_pPlane;
 	static MyPlane *m_pMyPlane;
 
 public:
@@ -23,6 +25,7 @@ public:
 
 	bool init();
 	void isOver();
+	bool hitByEnemy(CCSprite *enemy, int power);
 
 	//touch
 	virtual bool ccTouchBegan(cocos2d::CCTouch* touch, cocos2d::CCEvent* event);

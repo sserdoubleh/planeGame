@@ -8,17 +8,23 @@ class EnemyPlane :
 	public cocos2d::CCLayer
 {
 private:
+	static const int DEFAULT_HP = 50;
+	static const int DEFAULT_POWER = 20;
 	static EnemyPlane *m_pSharedEnemyPlane;
+
 protected:
+	//	The array of the enemy planes (CCPlane)
 	CCArray *m_pArrayOfPlane;
 public:
 
 	static EnemyPlane *getSharedEnemyPlane();
 	bool init();
 	void isOver(int index);
+	bool hitByBullet(CCSprite *bullet, int power);
 
 	void shoot(float dt);
 	void addEnemyPlane(float dt);
+	void hit(float dt);
 
 	CREATE_FUNC(EnemyPlane);
 };

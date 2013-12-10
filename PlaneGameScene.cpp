@@ -42,7 +42,18 @@ bool PlaneGameScene::init()
 		EnemyBullet *pEnemyBullet = EnemyBullet::getSharedEnemyBullet();
 		this->addChild(pEnemyBullet,0);
 
+		this->schedule(schedule_selector(PlaneGameScene::judgeCrash));
+
 		bRet = true;
 	} while (0);
 	return bRet;
+}
+
+void PlaneGameScene::judgeCrash(float dt)
+{
+	MyPlane::getSharedMyPlane();
+	MyBullet *pMyBullet = MyBullet::getSharedMyBullet();
+	EnemyPlane *pEnemyPlane = EnemyPlane::getSharedEnemyPlane();
+	EnemyBullet *pEnemyBullet = EnemyBullet::getSharedEnemyBullet();
+
 }
