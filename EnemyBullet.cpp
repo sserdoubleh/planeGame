@@ -1,5 +1,6 @@
 #include "EnemyBullet.h"
 #include "MyPlane.h"
+#include "CCBullet.h"
 #include "cocos2d.h"
 
 USING_NS_CC;
@@ -23,26 +24,26 @@ bool EnemyBullet::init()
 		m_pArrayOfBullet->retain();
 
 		this->schedule(schedule_selector(EnemyBullet::move), 0.1f);
-		this->schedule(schedule_selector(EnemyBullet::hit), 0.1f);
+		this->schedule(schedule_selector(EnemyBullet::hit));
 		bRet = true;
 	} while (0);
 	return bRet;
 }
 
-void EnemyBullet::isOver(int index)
+void EnemyBullet::isOver(CCBullet *pDelBullet)
 {
-	CCSprite *pDelBullet = (CCSprite*)m_pArrayOfBullet->objectAtIndex(index);
-	m_pArrayOfBullet->removeObjectAtIndex(index);
-	pDelBullet->removeFromParent();
+	m_pArrayOfBullet->removeObject(pDelBullet);
+	pDelBullet->isOver();
 }
 
 void EnemyBullet::addNewBullet(CCPoint from)
 {
-	CCSprite *pNewBullet = CCSprite::createWithSpriteFrameName("W2.png");
-	ccBlendFunc blend = {GL_SRC_ALPHA, GL_ONE};
-	pNewBullet->setBlendFunc(blend);
+	CCBullet *pNewBullet = CCBullet::createWithPowerAndId(DEFAULT_POWER, 2);
+
+	//	Add to task team.
 	m_pArrayOfBullet->addObject(pNewBullet);
 
+	//	Add to layer.
 	pNewBullet->setPosition(from);
 	this->addChild(pNewBullet);
 }
@@ -52,11 +53,11 @@ void EnemyBullet::move(float dt)
 	CCDirector *pDirector = CCDirector::sharedDirector();
 	for (int i = 0; i < m_pArrayOfBullet->count(); )
 	{
-		CCSprite *pCurBullet = (CCSprite*)m_pArrayOfBullet->objectAtIndex(i);
+		CCBullet *pCurBullet = (CCBullet*)m_pArrayOfBullet->objectAtIndex(i);
 		pCurBullet->setPositionY(pCurBullet->getPositionY() - DEFAULT_SPEED);
 
 		if (pCurBullet->getPositionY() + pCurBullet->getContentSize().height / 2 < 0)
-			isOver(i);
+			isOver(pCurBullet);
 		else
 			i++;
 	}
@@ -67,9 +68,9 @@ void EnemyBullet::hit(float dt)
 	MyPlane *pMyPlane = MyPlane::getSharedMyPlane();
 	for (int i = 0; i < m_pArrayOfBullet->count(); )
 	{
-		CCSprite *pCurBullet = (CCSprite*) m_pArrayOfBullet->objectAtIndex(i);
+		CCBullet *pCurBullet = (CCBullet*) m_pArrayOfBullet->objectAtIndex(i);
 		if (pMyPlane->hitByEnemy(pCurBullet, DEFAULT_POWER))
-			isOver(i);
+			isOver(pCurBullet);
 		else
 			i++;
 	}

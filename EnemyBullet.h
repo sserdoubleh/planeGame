@@ -2,6 +2,7 @@
 #define __CC_ENEMY_BULLET_H__
 
 #include "cocos2d.h"
+#include "CCBullet.h"
 USING_NS_CC;
 
 class EnemyBullet :
@@ -13,14 +14,14 @@ private:
 	static EnemyBullet *m_pSharedEnemyBullet;
 
 protected:
-	//The array of the bullet(CCSprite)
+	//	The array of the bullet(CCBullet)
 	CCArray *m_pArrayOfBullet;
 
 public:
 
 	static EnemyBullet *getSharedEnemyBullet();
 	bool init();
-	void isOver(int index);
+	void isOver(CCBullet *bullet);
 
 	void addNewBullet(CCPoint from);
 

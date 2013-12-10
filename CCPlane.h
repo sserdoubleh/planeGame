@@ -5,7 +5,7 @@
 USING_NS_CC;
 
 class CCPlane :
-	cocos2d::CCSprite
+	public cocos2d::CCSprite
 {
 protected:
 	int hp;

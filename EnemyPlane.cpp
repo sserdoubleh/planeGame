@@ -6,6 +6,9 @@
 
 USING_NS_CC;
 
+const float EnemyPlane::DEFAULT_SHIFT_DISTANCE = 50.0f;
+const float EnemyPlane::DEFAULT_SPEED = 25.0f;
+
 EnemyPlane *EnemyPlane::m_pSharedEnemyPlane = NULL;
 
 EnemyPlane *EnemyPlane::getSharedEnemyPlane()
@@ -27,7 +30,7 @@ bool EnemyPlane::init()
 
 		this->schedule(schedule_selector(EnemyPlane::addEnemyPlane), 2.0f);
 		this->schedule(schedule_selector(EnemyPlane::shoot), 3.0f);
-		this->schedule(schedule_selector(EnemyPlane::hit), 0.1f);
+		this->schedule(schedule_selector(EnemyPlane::hit));
 
 		bRet = true;
 	} while (0);
@@ -80,16 +83,31 @@ void EnemyPlane::addEnemyPlane(float dt)
 	CCPoint origin = pDirector->getVisibleOrigin();
 	CCSize visibleSize = pDirector->getVisibleSize();
 	float random_x = CCRANDOM_0_1() * visibleSize.width;
-	float random_X = CCRANDOM_0_1() * visibleSize.width;
-	float random_Y = CCRANDOM_0_1() * visibleSize.height;
+	float x = CCRANDOM_0_1() * visibleSize.width;
+	float y = CCRANDOM_0_1() * visibleSize.height;
 
-	CCAction *pAction = CCSequence::create(
+	CCSequence *action = CCSequence::create(
 		CCPlace::create(ccp(random_x, origin.y + visibleSize.height)),
-		CCMoveTo::create(1.0f,ccp(random_X, random_Y)),
+		CCMoveTo::create(1.0f, ccp(x, y)),
+		CCCallFuncN::create(this, callfuncN_selector(EnemyPlane::repeatAction)),
 		NULL);
-	pNewPlane->runAction(pAction);
+
+	pNewPlane->runAction(action);
 
 	this->addChild(pNewPlane);
+}
+
+void EnemyPlane::repeatAction(CCNode *node)
+{
+	CCPlane *plane = (CCPlane*)node;
+	CCActionInterval *a1 = CCMoveBy::create(DEFAULT_SHIFT_DISTANCE / DEFAULT_SPEED,
+		ccp(-DEFAULT_SHIFT_DISTANCE, 0));
+	CCActionInterval *a2 = CCMoveBy::create(DEFAULT_SHIFT_DISTANCE / DEFAULT_SPEED,
+		ccp(DEFAULT_SHIFT_DISTANCE, 0));
+	CCRepeatForever *pRepeat = CCRepeatForever::create(
+		CCSequence::create(a1, a2, NULL));
+	plane->stopAllActions();
+	plane->runAction(pRepeat);
 }
 
 void EnemyPlane::shoot(float dt)

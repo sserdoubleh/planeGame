@@ -10,6 +10,8 @@ class EnemyPlane :
 private:
 	static const int DEFAULT_HP = 50;
 	static const int DEFAULT_POWER = 20;
+	static const float DEFAULT_SHIFT_DISTANCE;
+	static const float DEFAULT_SPEED;
 	static EnemyPlane *m_pSharedEnemyPlane;
 
 protected:
@@ -21,6 +23,7 @@ public:
 	bool init();
 	void isOver(int index);
 	bool hitByBullet(CCSprite *bullet, int power);
+	void repeatAction(CCNode *node);
 
 	void shoot(float dt);
 	void addEnemyPlane(float dt);

@@ -25,16 +25,15 @@ bool MyPlane::init()
 
 		m_pPlane = CCPlane::createWithHPAndId(DEFAULT_HP, 0);
 
-		CCSprite *pMyPlane = (CCSprite*)m_pPlane;
-		pMyPlane->initWithSpriteFrameName("ship03.png");
+		m_pPlane->initWithSpriteFrameName("ship03.png");
 		hp = DEFAULT_HP;
 
 		CCDirector *pDirector = CCDirector::sharedDirector();
-		pMyPlane->setPosition(ccp(pDirector->getVisibleSize().width / 2, 100));
-		this->addChild(pMyPlane);
+		m_pPlane->setPosition(ccp(pDirector->getVisibleSize().width / 2, 100));
+		this->addChild(m_pPlane);
 
 		this->schedule(schedule_selector(MyPlane::changePicture), 0.5f);
-		this->schedule(schedule_selector(MyPlane::shoot), 0.1f);
+		this->schedule(schedule_selector(MyPlane::shoot), 0.05f);
 		bRet = true;
 	} while (0);
 
@@ -47,9 +46,9 @@ bool MyPlane::hitByEnemy(CCSprite *enemy, int power)
 		return false;
 
 	CCPoint point = enemy->getPosition();
-	CCSprite *pMyPlane = (CCSprite*)m_pPlane;
-	CCPoint positionOfPlane = pMyPlane->getPosition();
-	CCSize sizeOfPlane = pMyPlane->getContentSize();
+	CCPoint positionOfPlane = m_pPlane->getPosition();
+	CCSize sizeOfPlane = m_pPlane->getContentSize();
+
 	if (positionOfPlane.x - sizeOfPlane.width / 2 <= point.x
 		&& point.x <= positionOfPlane.x + sizeOfPlane.width / 2
 		&& positionOfPlane.y - sizeOfPlane.height / 2 <= point.y
@@ -65,7 +64,6 @@ bool MyPlane::hitByEnemy(CCSprite *enemy, int power)
 
 void MyPlane::isOver()
 {
-	CCSprite *pMyPlane = (CCSprite*)m_pPlane;
 	m_bIsGameOver = true;
 	m_pPlane->isOver();
 }
@@ -91,10 +89,10 @@ bool MyPlane::ccTouchBegan(CCTouch* touch, CCEvent* event)
 	CCPoint point = touch->getLocation();
 
 	//	the position of my plane
+	CCPoint pointOfSprite = m_pPlane->getPosition();
+	//	the size of my plane
+	CCSize size = m_pPlane->getContentSize();
 
-	CCSprite *pMyPlane = (CCSprite*)m_pPlane;
-	CCPoint pointOfSprite = pMyPlane->getPosition();
-	CCSize size = pMyPlane->getContentSize();
 	return abs(point.x - pointOfSprite.x) <= size.width / 2
 		&& abs(point.y - pointOfSprite.y) <= size.height / 2;
 }
@@ -105,9 +103,9 @@ void MyPlane::ccTouchMoved(CCTouch* touch, CCEvent* event){
 		return;
 
 	CCPoint point = touch->getLocation();
-	CCSprite *pMyPlane = (CCSprite*)m_pPlane;
-	pMyPlane->stopAllActions();
-	pMyPlane->setPosition(point);
+
+	m_pPlane->stopAllActions();
+	m_pPlane->setPosition(point);
 }
 
 void MyPlane::shoot(float dt)
@@ -117,8 +115,11 @@ void MyPlane::shoot(float dt)
 
 	MyBullet *pMyBullet = MyBullet::getSharedMyBullet();
 
-	CCSprite *pMyPlane = (CCSprite*)m_pPlane;
-	pMyBullet->addNewBullet(pMyPlane->getPosition());
+	CCPoint positionOfPlane = m_pPlane->getPosition();
+	CCSize sizeOfPlane = m_pPlane->getContentSize();
+
+	pMyBullet->addNewBullet(ccp(positionOfPlane.x - sizeOfPlane.width / 4, positionOfPlane.y));
+	pMyBullet->addNewBullet(ccp(positionOfPlane.x + sizeOfPlane.width / 4, positionOfPlane.y));
 }
 
 void MyPlane::changePicture(float dt)
@@ -126,17 +127,19 @@ void MyPlane::changePicture(float dt)
 	if (m_bIsGameOver)
 		return;
 
-	CCSprite *pMyPlane = (CCSprite*)m_pPlane;
-	float beforeChangeHeight =  pMyPlane->getContentSize().height;
+	float beforeChangeHeight =  m_pPlane->getContentSize().height;
 
 	//	Change frame
 	m_frame = (m_frame + 1) % SHIP_MAX_NUMBER;
 	char str[20] = {0};
 	sprintf(str, "ship%02d.png", m_frame + 1);
-	pMyPlane->initWithSpriteFrameName(str);
+	m_pPlane->initWithSpriteFrameName(str);
 
-	float afterChangeHeight = pMyPlane->getContentSize().height;
+	m_pPlane->initWithSpriteFrameName(str);
+
+	float afterChangeHeight = m_pPlane->getContentSize().height;
 
 	//	Fix the position to set the position as before.
-	pMyPlane->setPosition(ccp(pMyPlane->getPositionX(), pMyPlane->getPositionY() + (afterChangeHeight - beforeChangeHeight) / 2));
+	m_pPlane->setPosition(ccp(m_pPlane->getPositionX(),
+		m_pPlane->getPositionY() + (afterChangeHeight - beforeChangeHeight) / 2));
 }

@@ -46,7 +46,7 @@ void CCPlane::isOver()
 		actionFrames->addObject(frame);
 	}
 
-	CCAnimation *showAction = CCAnimation::createWithSpriteFrames(actionFrames, 0.1f);
+	CCAnimation *showAction = CCAnimation::createWithSpriteFrames(actionFrames, 0.05f);
 
 	CCAction *action = CCSequence::create(
 		CCAnimate::create(showAction),

@@ -2,6 +2,7 @@
 #define __CC_MY_BULLET_H__
 
 #include "cocos2d.h"
+#include "CCBullet.h"
 USING_NS_CC;
 
 class MyBullet :
@@ -9,18 +10,18 @@ class MyBullet :
 {
 private:
 	static MyBullet *m_pSharedMyBullet;
+	static const int DEFAULT_POWER = 10;
+	static const float DEFAULT_SPEED;
 
 protected:
-	//The array of the bullet(CCSprite)
+	//	The array of the bullet(MyBullet)
 	CCArray *m_pArrayOfBullet;
 
 public:
-	
-	static const int DEFAULT_POWER = 10;
 
 	static MyBullet * getSharedMyBullet();
 	bool init();
-	void isOver(int index);
+	void isOver(CCBullet *pDelBullet);
 
 	void addNewBullet(CCPoint from);
 

@@ -1,10 +1,13 @@
 #include "MyBullet.h"
 #include "EnemyPlane.h"
+#include "CCBullet.h"
 #include "cocos2d.h"
 
 USING_NS_CC;
 
 MyBullet *MyBullet::m_pSharedMyBullet = NULL;
+
+const float MyBullet::DEFAULT_SPEED = 50.0f;
 
 MyBullet *MyBullet::getSharedMyBullet()
 {
@@ -22,27 +25,27 @@ bool MyBullet::init()
 		m_pArrayOfBullet = CCArray::create();
 		m_pArrayOfBullet->retain();
 
-		this->schedule(schedule_selector(MyBullet::move), 0.1f);
-		this->schedule(schedule_selector(MyBullet::hit), 0.1f);
+		this->schedule(schedule_selector(MyBullet::move), 0.05f);
+		this->schedule(schedule_selector(MyBullet::hit));
 		bRet = true;
 	} while (0);
 	return bRet;
 }
 
-void MyBullet::isOver(int index)
+void MyBullet::isOver(CCBullet *pDelBullet)
 {
-	CCSprite *pDelBullet = (CCSprite*)m_pArrayOfBullet->objectAtIndex(index);
-	m_pArrayOfBullet->removeObjectAtIndex(index);
-	pDelBullet->removeFromParent();
+	m_pArrayOfBullet->removeObject(pDelBullet);
+	pDelBullet->isOver();
 }
 
 void MyBullet::addNewBullet(CCPoint from)
 {
-	CCSprite *pNewBullet = CCSprite::createWithSpriteFrameName("W1.png");
-	ccBlendFunc blend = {GL_SRC_ALPHA, GL_ONE};
-	pNewBullet->setBlendFunc(blend);
+	CCBullet *pNewBullet = CCBullet::createWithPowerAndId(DEFAULT_POWER, 1);
+
+	//	Add to task team.
 	m_pArrayOfBullet->addObject(pNewBullet);
 
+	//	Add to layer.
 	pNewBullet->setPosition(from);
 	this->addChild(pNewBullet);
 }
@@ -53,11 +56,11 @@ void MyBullet::move(float dt)
 	CCDirector *pDirector = CCDirector::sharedDirector();
 	for (int i = 0; i < m_pArrayOfBullet->count(); )
 	{
-		CCSprite *pCurBullet = (CCSprite*)m_pArrayOfBullet->objectAtIndex(i);
-		pCurBullet->setPositionY(pCurBullet->getPositionY() + pCurBullet->getContentSize().height);
+		CCBullet *pCurBullet = (CCBullet*)m_pArrayOfBullet->objectAtIndex(i);
+		pCurBullet->setPositionY(pCurBullet->getPositionY() + DEFAULT_SPEED);
 
 		if (pCurBullet->getPositionY() - pCurBullet->getContentSize().height / 2 > pDirector->getWinSize().height)
-			isOver(i);
+			isOver(pCurBullet);
 		else
 			i++;
 	}
@@ -68,9 +71,9 @@ void MyBullet::hit(float dt)
 	EnemyPlane *pEnemyPlane = EnemyPlane::getSharedEnemyPlane();
 	for (int i = 0; i < m_pArrayOfBullet->count(); )
 	{
-		CCSprite *pCurBullet = (CCSprite*) m_pArrayOfBullet->objectAtIndex(i);
+		CCBullet *pCurBullet = (CCBullet*) m_pArrayOfBullet->objectAtIndex(i);
 		if (pEnemyPlane->hitByBullet(pCurBullet, DEFAULT_POWER))
-			isOver(i);
+			isOver(pCurBullet);
 		else
 			i++;
 	}
