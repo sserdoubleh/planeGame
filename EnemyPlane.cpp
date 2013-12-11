@@ -8,6 +8,7 @@ USING_NS_CC;
 
 const float EnemyPlane::DEFAULT_SHIFT_DISTANCE = 50.0f;
 const float EnemyPlane::DEFAULT_SPEED = 25.0f;
+const float EnemyPlane::DEFAULT_SPACE = 60.0f;
 
 EnemyPlane *EnemyPlane::m_pSharedEnemyPlane = NULL;
 
@@ -31,6 +32,7 @@ bool EnemyPlane::init()
 		this->schedule(schedule_selector(EnemyPlane::addEnemyPlane), 2.0f);
 		this->schedule(schedule_selector(EnemyPlane::shoot), 3.0f);
 		this->schedule(schedule_selector(EnemyPlane::hit));
+		this->schedule(schedule_selector(EnemyPlane::judgeOutOfRange));
 
 		bRet = true;
 	} while (0);
@@ -84,7 +86,7 @@ void EnemyPlane::addEnemyPlane(float dt)
 	CCSize visibleSize = pDirector->getVisibleSize();
 	float random_x = CCRANDOM_0_1() * visibleSize.width;
 	float x = CCRANDOM_0_1() * visibleSize.width;
-	float y = CCRANDOM_0_1() * visibleSize.height;
+	float y = CCRANDOM_0_1() * (visibleSize.height + DEFAULT_SPACE) + DEFAULT_SPACE;
 
 	CCSequence *action = CCSequence::create(
 		CCPlace::create(ccp(random_x, origin.y + visibleSize.height)),
@@ -126,6 +128,22 @@ void EnemyPlane::hit(float dt)
 	{
 		CCSprite *pCurPlane = (CCSprite*)m_pArrayOfPlane->objectAtIndex(i);
 		if (pMyPlane->hitByEnemy(pCurPlane, DEFAULT_POWER))
+			isOver(i);
+		else
+			i++;
+	}
+}
+
+void EnemyPlane::judgeOutOfRange(float dt)
+{
+	CCDirector *pDirector = CCDirector::sharedDirector();
+	CCSize sizeOfVisible = pDirector->getVisibleSize();
+	for (int i = 0; i < m_pArrayOfPlane->count(); )
+	{
+		CCSprite *pCurPlane = (CCSprite*)m_pArrayOfPlane->objectAtIndex(i);
+		CCPoint positionOfPlane = pCurPlane->getPosition();
+		if (positionOfPlane.x < 0 || positionOfPlane.x > sizeOfVisible.width
+			|| positionOfPlane.y < 0 || positionOfPlane.y > sizeOfVisible.height)
 			isOver(i);
 		else
 			i++;

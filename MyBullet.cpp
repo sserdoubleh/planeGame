@@ -7,7 +7,7 @@ USING_NS_CC;
 
 MyBullet *MyBullet::m_pSharedMyBullet = NULL;
 
-const float MyBullet::DEFAULT_SPEED = 50.0f;
+const float MyBullet::DEFAULT_SPEED = 30.0f;
 
 MyBullet *MyBullet::getSharedMyBullet()
 {
@@ -25,7 +25,7 @@ bool MyBullet::init()
 		m_pArrayOfBullet = CCArray::create();
 		m_pArrayOfBullet->retain();
 
-		this->schedule(schedule_selector(MyBullet::move), 0.05f);
+		this->schedule(schedule_selector(MyBullet::move));
 		this->schedule(schedule_selector(MyBullet::hit));
 		bRet = true;
 	} while (0);
@@ -59,7 +59,7 @@ void MyBullet::move(float dt)
 		CCBullet *pCurBullet = (CCBullet*)m_pArrayOfBullet->objectAtIndex(i);
 		pCurBullet->setPositionY(pCurBullet->getPositionY() + DEFAULT_SPEED);
 
-		if (pCurBullet->getPositionY() - pCurBullet->getContentSize().height / 2 > pDirector->getWinSize().height)
+		if (pCurBullet->getPositionY() - pCurBullet->getContentSize().height / 2 > pDirector->getVisibleSize().height)
 			isOver(pCurBullet);
 		else
 			i++;

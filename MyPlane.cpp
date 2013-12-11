@@ -33,7 +33,7 @@ bool MyPlane::init()
 		this->addChild(m_pPlane);
 
 		this->schedule(schedule_selector(MyPlane::changePicture), 0.5f);
-		this->schedule(schedule_selector(MyPlane::shoot), 0.05f);
+		this->schedule(schedule_selector(MyPlane::shoot), 0.2f);
 		bRet = true;
 	} while (0);
 
@@ -104,8 +104,13 @@ void MyPlane::ccTouchMoved(CCTouch* touch, CCEvent* event){
 
 	CCPoint point = touch->getLocation();
 
+	CCDirector *pDirector = CCDirector::sharedDirector();
+	CCSize sizeOfVisible = pDirector->getVisibleSize();
+
+	CCPoint newPoint = CCPoint( max(0.0f,min(point.x, sizeOfVisible.width)), max(0.0f,min(point.y,sizeOfVisible.height)) );
+
 	m_pPlane->stopAllActions();
-	m_pPlane->setPosition(point);
+	m_pPlane->setPosition(newPoint);
 }
 
 void MyPlane::shoot(float dt)

@@ -1,5 +1,6 @@
 #include "AppDelegate.h"
 #include "PlaneGameScene.h"
+#include "WelcomeScene.h"
 
 USING_NS_CC;
 
@@ -17,8 +18,6 @@ bool AppDelegate::applicationDidFinishLaunching() {
     CCEGLView* pEGLView = CCEGLView::sharedOpenGLView();
 
 	pDirector->setOpenGLView(pEGLView);
-
-	//pEGLView->setDesignResolutionSize(320.0f, 480.0f, kResolutionShowAll);
 	
     // turn on display FPS
     pDirector->setDisplayStats(true);
@@ -27,7 +26,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     pDirector->setAnimationInterval(1.0 / 60);
 
     // create a scene. it's an autorelease object
-    PlaneGameScene *pScene = PlaneGameScene::create();
+	WelcomeScene *pScene = WelcomeScene::create();
 
     // run
     pDirector->runWithScene(pScene);
@@ -38,15 +37,9 @@ bool AppDelegate::applicationDidFinishLaunching() {
 // This function will be called when the app is inactive. When comes a phone call,it's be invoked too
 void AppDelegate::applicationDidEnterBackground() {
     CCDirector::sharedDirector()->stopAnimation();
-
-    // if you use SimpleAudioEngine, it must be pause
-    // SimpleAudioEngine::sharedEngine()->pauseBackgroundMusic();
 }
 
 // this function will be called when the app is active again
 void AppDelegate::applicationWillEnterForeground() {
     CCDirector::sharedDirector()->startAnimation();
-
-    // if you use SimpleAudioEngine, it must resume here
-    // SimpleAudioEngine::sharedEngine()->resumeBackgroundMusic();
 }

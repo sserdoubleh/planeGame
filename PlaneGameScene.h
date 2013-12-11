@@ -11,8 +11,6 @@ public:
 	
 	bool init();
 
-	void judgeCrash(float dt);
-
 	CREATE_FUNC(PlaneGameScene);
 };
 

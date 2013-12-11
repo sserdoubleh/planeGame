@@ -12,6 +12,7 @@ private:
 	static const int DEFAULT_POWER = 20;
 	static const float DEFAULT_SHIFT_DISTANCE;
 	static const float DEFAULT_SPEED;
+	static const float DEFAULT_SPACE;
 	static EnemyPlane *m_pSharedEnemyPlane;
 
 protected:
@@ -28,6 +29,7 @@ public:
 	void shoot(float dt);
 	void addEnemyPlane(float dt);
 	void hit(float dt);
+	void judgeOutOfRange(float dt);
 
 	CREATE_FUNC(EnemyPlane);
 };
