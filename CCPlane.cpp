@@ -1,7 +1,10 @@
 #include "CCPlane.h"
 #include "cocos2d.h"
+#include "SimpleAudioEngine.h"
+#include "PlaneGameScene.h"
 
 USING_NS_CC;
+using namespace CocosDenshion;
 
 CCPlane *CCPlane::createWithHPAndId(int hp, int id)
 {
@@ -55,6 +58,8 @@ void CCPlane::isOver()
 	
 	this->stopAllActions();
 	this->runAction(action);
+
+	SimpleAudioEngine::sharedEngine()->playEffect(SHIP_DESTROY_EFFECT_MUSIC);
 }
 
 void CCPlane::removeItselfFromeParent()

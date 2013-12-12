@@ -8,10 +8,10 @@ class CCPlane :
 	public cocos2d::CCSprite
 {
 protected:
-	int hp;
 	int id;
 
 public:
+	int hp;
 	
 	static CCPlane *createWithHPAndId(int hp, int id);
 

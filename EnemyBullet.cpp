@@ -6,6 +6,7 @@
 USING_NS_CC;
 
 EnemyBullet *EnemyBullet::m_pSharedEnemyBullet = NULL;
+const float EnemyBullet::DEFAULT_SPEED = 3.0f;
 
 EnemyBullet *EnemyBullet::getSharedEnemyBullet()
 {
@@ -23,7 +24,7 @@ bool EnemyBullet::init()
 		m_pArrayOfBullet = CCArray::create();
 		m_pArrayOfBullet->retain();
 
-		this->schedule(schedule_selector(EnemyBullet::move), 0.1f);
+		this->schedule(schedule_selector(EnemyBullet::move));
 		this->schedule(schedule_selector(EnemyBullet::hit));
 		bRet = true;
 	} while (0);

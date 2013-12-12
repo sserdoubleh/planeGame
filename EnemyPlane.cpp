@@ -2,6 +2,7 @@
 #include "CCPlane.h"
 #include "EnemyPlane.h"
 #include "EnemyBullet.h"
+#include "PlaneGameScene.h"
 #include "MyPlane.h"
 
 USING_NS_CC;
@@ -45,6 +46,9 @@ void EnemyPlane::isOver(int index)
 	m_pArrayOfPlane->removeObjectAtIndex(index);
 	CCPlane *pPlane = (CCPlane*)pDelPlane;
 	pPlane->isOver();
+
+	PlaneGameScene *gameScene = (PlaneGameScene*)this->getParent();
+	gameScene->addScore(20);
 }
 
 bool EnemyPlane::hitByBullet(CCSprite *bullet, int power)
@@ -86,7 +90,7 @@ void EnemyPlane::addEnemyPlane(float dt)
 	CCSize visibleSize = pDirector->getVisibleSize();
 	float random_x = CCRANDOM_0_1() * visibleSize.width;
 	float x = CCRANDOM_0_1() * visibleSize.width;
-	float y = CCRANDOM_0_1() * (visibleSize.height + DEFAULT_SPACE) + DEFAULT_SPACE;
+	float y = CCRANDOM_0_1() * (visibleSize.height - DEFAULT_SPACE) + DEFAULT_SPACE;
 
 	CCSequence *action = CCSequence::create(
 		CCPlace::create(ccp(random_x, origin.y + visibleSize.height)),
@@ -142,8 +146,7 @@ void EnemyPlane::judgeOutOfRange(float dt)
 	{
 		CCSprite *pCurPlane = (CCSprite*)m_pArrayOfPlane->objectAtIndex(i);
 		CCPoint positionOfPlane = pCurPlane->getPosition();
-		if (positionOfPlane.x < 0 || positionOfPlane.x > sizeOfVisible.width
-			|| positionOfPlane.y < 0 || positionOfPlane.y > sizeOfVisible.height)
+		if (positionOfPlane.x < 0 || positionOfPlane.x > sizeOfVisible.width)
 			isOver(i);
 		else
 			i++;

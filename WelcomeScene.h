@@ -18,6 +18,7 @@ public:
 	void optionMenu(CCObject *sender);
 	void aboutMenu(CCObject *sender);
 	void playAgainMenu(CCObject *sender);
+	void turnToPlayGame();
 
 	CREATE_FUNC(WelcomeScene);
 };

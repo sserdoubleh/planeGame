@@ -10,11 +10,10 @@ class MyPlane :
 	public cocos2d::CCTouchDelegate
 {
 private:
-	static const int DEFAULT_HP = 2000;
+	static const int DEFAULT_HP = 20;
 	static const int SHIP_MAX_NUMBER = 3;
 
 protected:
-	int hp;
 	int m_frame;
 	bool m_bIsGameOver;
 	CCPlane *m_pPlane;

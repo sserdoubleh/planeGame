@@ -10,7 +10,7 @@ class EnemyBullet :
 {
 private:
 	static const int DEFAULT_POWER = 7;
-	static const int DEFAULT_SPEED = 30;
+	static const float DEFAULT_SPEED;
 	static EnemyBullet *m_pSharedEnemyBullet;
 
 protected:

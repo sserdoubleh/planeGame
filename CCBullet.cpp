@@ -1,7 +1,10 @@
 #include "cocos2d.h"
 #include "CCBullet.h"
+#include "SimpleAudioEngine.h"
+#include "PlaneGameScene.h"
 
 USING_NS_CC;
+using namespace CocosDenshion;
 
 CCBullet *CCBullet::createWithPowerAndId(int power, int id)
 {
@@ -49,6 +52,8 @@ void CCBullet::isOver()
 
 	this->stopAllActions();
 	this->runAction(action);
+
+	SimpleAudioEngine::sharedEngine()->playEffect(EXPLODE_EFFECT_MUSIC);
 }
 
 void CCBullet::removeItselfFromeParent()

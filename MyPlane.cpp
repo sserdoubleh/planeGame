@@ -1,6 +1,10 @@
 #include "MyPlane.h"
 #include "MyBullet.h"
+#include "SimpleAudioEngine.h"
+#include "PlaneGameScene.h"
+
 USING_NS_CC;
+using namespace CocosDenshion;
 
 MyPlane *MyPlane::m_pMyPlane = NULL;
 
@@ -26,7 +30,6 @@ bool MyPlane::init()
 		m_pPlane = CCPlane::createWithHPAndId(DEFAULT_HP, 0);
 
 		m_pPlane->initWithSpriteFrameName("ship03.png");
-		hp = DEFAULT_HP;
 
 		CCDirector *pDirector = CCDirector::sharedDirector();
 		m_pPlane->setPosition(ccp(pDirector->getVisibleSize().width / 2, 100));
@@ -42,6 +45,7 @@ bool MyPlane::init()
 
 bool MyPlane::hitByEnemy(CCSprite *enemy, int power)
 {
+
 	if (m_bIsGameOver)
 		return false;
 
@@ -54,6 +58,7 @@ bool MyPlane::hitByEnemy(CCSprite *enemy, int power)
 		&& positionOfPlane.y - sizeOfPlane.height / 2 <= point.y
 		&& point.y <= positionOfPlane.y + sizeOfPlane.height)
 	{
+		CCLOG("HP: %d", m_pPlane->hp);
 		if (m_pPlane->lostHP(power))
 			isOver();
 		return true;
@@ -66,6 +71,10 @@ void MyPlane::isOver()
 {
 	m_bIsGameOver = true;
 	m_pPlane->isOver();
+
+	PlaneGameScene *pPlaneGameScene = (PlaneGameScene*)this->getParent();
+
+	pPlaneGameScene->isGameOver();
 }
 
 void MyPlane::onEnter()
@@ -125,6 +134,8 @@ void MyPlane::shoot(float dt)
 
 	pMyBullet->addNewBullet(ccp(positionOfPlane.x - sizeOfPlane.width / 4, positionOfPlane.y));
 	pMyBullet->addNewBullet(ccp(positionOfPlane.x + sizeOfPlane.width / 4, positionOfPlane.y));
+
+	SimpleAudioEngine::sharedEngine()->playEffect(FIRE_EFFECT_MUSIC);
 }
 
 void MyPlane::changePicture(float dt)
