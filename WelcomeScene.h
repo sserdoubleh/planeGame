@@ -4,6 +4,9 @@
 #include "cocos2d.h"
 USING_NS_CC;
 
+#define MAIN_MUSIC "Music/mainMainMusic.mp3"
+#define BUTTON_EFFECT "Music/buttonEffect.mp3"
+
 class WelcomeScene :
 	public cocos2d::CCScene
 {

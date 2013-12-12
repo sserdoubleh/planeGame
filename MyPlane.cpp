@@ -8,6 +8,12 @@ using namespace CocosDenshion;
 
 MyPlane *MyPlane::m_pMyPlane = NULL;
 
+MyPlane *MyPlane::newMyPlane()
+{
+	m_pMyPlane = MyPlane::create();
+	return m_pMyPlane;
+}
+
 MyPlane *MyPlane::getSharedMyPlane()
 {
 	if (m_pMyPlane == NULL)

@@ -19,6 +19,7 @@ protected:
 
 public:
 
+	static EnemyBullet *newEnemyBullet();
 	static EnemyBullet *getSharedEnemyBullet();
 	bool init();
 	void isOver(CCBullet *bullet);

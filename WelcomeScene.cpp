@@ -6,9 +6,6 @@
 USING_NS_CC;
 using namespace CocosDenshion;
 
-#define MAIN_MUSIC "Music/mainMainMusic.mp3"
-#define BUTTON_EFFECT "Music/buttonEffect.mp3"
-
 const char WelcomeScene::m_sMenuItem[] = "menu.png";
 
 SEL_MenuHandler WelcomeScene::callbackFuncions[] =

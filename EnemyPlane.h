@@ -20,6 +20,7 @@ protected:
 	CCArray *m_pArrayOfPlane;
 public:
 
+	static EnemyPlane *newEnemyPlane();
 	static EnemyPlane *getSharedEnemyPlane();
 	bool init();
 	void isOver(int index);

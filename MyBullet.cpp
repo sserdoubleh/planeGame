@@ -9,6 +9,12 @@ MyBullet *MyBullet::m_pSharedMyBullet = NULL;
 
 const float MyBullet::DEFAULT_SPEED = 30.0f;
 
+MyBullet *MyBullet::newMyBullet()
+{
+	m_pSharedMyBullet = MyBullet::create();
+	return m_pSharedMyBullet;
+}
+
 MyBullet *MyBullet::getSharedMyBullet()
 {
 	if (m_pSharedMyBullet == NULL)

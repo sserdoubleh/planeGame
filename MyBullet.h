@@ -19,6 +19,7 @@ protected:
 
 public:
 
+	static MyBullet * newMyBullet();
 	static MyBullet * getSharedMyBullet();
 	bool init();
 	void isOver(CCBullet *pDelBullet);

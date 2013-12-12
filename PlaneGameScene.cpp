@@ -5,6 +5,7 @@
 #include "EnemyPlane.h"
 #include "EnemyBullet.h"
 #include "time.h"
+#include "GameOverScene.h"
 #include "cocos2d.h"
 
 USING_NS_CC;
@@ -27,20 +28,20 @@ bool PlaneGameScene::init()
 		this->addChild(pBackgroud);
 
 		//	My plane init
-		m_pMyPlane = MyPlane::getSharedMyPlane();
+		m_pMyPlane = MyPlane::newMyPlane();
 		this->addChild(m_pMyPlane,1);
 
 		//	My bullet init
-		m_pMyBullet = MyBullet::getSharedMyBullet();
+		m_pMyBullet = MyBullet::newMyBullet();
 		this->addChild(m_pMyBullet,0);
 
 		srand(time(NULL));
 		//	Enemy plane init
-		m_pEnemyPlane = EnemyPlane::getSharedEnemyPlane();
+		m_pEnemyPlane = EnemyPlane::newEnemyPlane();
 		this->addChild(m_pEnemyPlane,1);
 
 		//	Enemy bullet init
-		m_pEnemyBullet = EnemyBullet::getSharedEnemyBullet();
+		m_pEnemyBullet = EnemyBullet::newEnemyBullet();
 		this->addChild(m_pEnemyBullet,0);
 
 		//	Score recode init
@@ -62,8 +63,8 @@ bool PlaneGameScene::init()
 		SimpleAudioEngine::sharedEngine()->preloadEffect(EXPLODE_EFFECT_MUSIC);
 
 		//	set volume
-		SimpleAudioEngine::sharedEngine()->setBackgroundMusicVolume(0.5);
-		SimpleAudioEngine::sharedEngine()->setEffectsVolume(0.3);
+		SimpleAudioEngine::sharedEngine()->setBackgroundMusicVolume(0.5f);
+		SimpleAudioEngine::sharedEngine()->setEffectsVolume(0.3f);
 
 		SimpleAudioEngine::sharedEngine()->playBackgroundMusic(BACKGROUND_MUSIC, true);
 
@@ -85,4 +86,8 @@ void PlaneGameScene::isGameOver()
 	m_pMyBullet->unschedule(schedule_selector(MyPlane::shoot));
 
 	m_pEnemyPlane->unschedule(schedule_selector(EnemyPlane::addEnemyPlane));
+
+	GameOverScene *gameOver = GameOverScene::scene(m_nScore);
+
+	CCDirector::sharedDirector()->replaceScene(gameOver);
 }

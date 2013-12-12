@@ -6,8 +6,7 @@
 USING_NS_CC;
 
 class MyPlane :
-	public cocos2d::CCLayer,
-	public cocos2d::CCTouchDelegate
+	public cocos2d::CCLayer
 {
 private:
 	static const int DEFAULT_HP = 20;
@@ -21,6 +20,7 @@ protected:
 
 public:
 
+	static MyPlane *newMyPlane();
 	static MyPlane *getSharedMyPlane();
 
 	bool init();

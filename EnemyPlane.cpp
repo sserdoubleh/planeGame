@@ -13,6 +13,12 @@ const float EnemyPlane::DEFAULT_SPACE = 60.0f;
 
 EnemyPlane *EnemyPlane::m_pSharedEnemyPlane = NULL;
 
+EnemyPlane *EnemyPlane::newEnemyPlane()
+{
+	m_pSharedEnemyPlane = EnemyPlane::create();
+	return m_pSharedEnemyPlane;
+}
+
 EnemyPlane *EnemyPlane::getSharedEnemyPlane()
 {
 	if (m_pSharedEnemyPlane == NULL)

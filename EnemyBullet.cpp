@@ -8,6 +8,12 @@ USING_NS_CC;
 EnemyBullet *EnemyBullet::m_pSharedEnemyBullet = NULL;
 const float EnemyBullet::DEFAULT_SPEED = 3.0f;
 
+EnemyBullet *EnemyBullet::newEnemyBullet()
+{
+	m_pSharedEnemyBullet = EnemyBullet::create();
+	return m_pSharedEnemyBullet;
+}
+
 EnemyBullet *EnemyBullet::getSharedEnemyBullet()
 {
 	if (m_pSharedEnemyBullet == NULL)
